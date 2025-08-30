@@ -5,6 +5,7 @@ import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +49,14 @@ public class PlaceholderAPI extends PlaceholderExpansion
     public boolean persist()
     {
         return true;
+    }
+
+    public static String setPAPIPlaceholders(OfflinePlayer player, String msg){
+        return me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, msg);
+    }
+    public static String setPAPIPlaceholders(CommandSender cmdSender, String msg){
+        var p = cmdSender instanceof Player ? (Player)cmdSender : null;
+        return me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(p , msg);
     }
 
     @Override

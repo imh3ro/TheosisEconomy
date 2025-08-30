@@ -12,6 +12,7 @@ import me.Short.TheosisEconomy.Commands.PaytoggleCommand;
 import me.Short.TheosisEconomy.Events.PreBaltopSortEvent;
 import me.Short.TheosisEconomy.Listeners.PlayerJoinListener;
 import me.Short.TheosisEconomy.Listeners.ServerLoadListener;
+import me.clip.placeholderapi.PlaceholderHook;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -116,6 +117,7 @@ public class TheosisEconomy extends JavaPlugin
     private boolean baltopConsiderExcludePermission;
     private boolean baltopExcludeBannedPlayers;
     private BigDecimal baltopMinBalance;
+    private static boolean papiEnabled;
 
     @Override
     public void onEnable()
@@ -189,6 +191,7 @@ public class TheosisEconomy extends JavaPlugin
         // Register PlaceholderAPI placeholders, if PlaceholderAPI is installed
         if (pluginManager.getPlugin("PlaceholderAPI") != null)
         {
+            papiEnabled = true;
             new PlaceholderAPI(this).register();
         }
 
@@ -423,6 +426,8 @@ public class TheosisEconomy extends JavaPlugin
     {
         if (!message.isEmpty())
         {
+            if(papiEnabled)
+                message = PlaceholderAPI.setPAPIPlaceholders(sender, message);
             Component messageComponent = miniMessage.deserialize(message);
 
             if (sender instanceof Player)
@@ -441,8 +446,10 @@ public class TheosisEconomy extends JavaPlugin
     {
         if (!message.isEmpty())
         {
-            Component messageComponent = miniMessage.deserialize(message, tagResolvers);
+            if(papiEnabled)
+                message = PlaceholderAPI.setPAPIPlaceholders(sender, message);
 
+            Component messageComponent = miniMessage.deserialize(message, tagResolvers);
             if (sender instanceof Player)
             {
                 ((Player) sender).spigot().sendMessage(bungeeComponentSerializer.serialize(messageComponent));
@@ -639,5 +646,4 @@ public class TheosisEconomy extends JavaPlugin
     {
         this.combinedTotalBalance = combinedTotalBalance;
     }
-
 }
